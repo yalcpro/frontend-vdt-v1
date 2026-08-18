@@ -1,0 +1,175 @@
+.container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section {
+  padding: 1.5rem;
+  border-radius: 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--accent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.section:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.section h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  color: var(--accent);
+  font-size: 1.2rem;
+}
+
+.sectionIcon {
+  font-size: 1.3rem;
+}
+
+.linkWithArrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 500;
+  padding: 0.4rem 0;
+  transition: color 0.2s;
+}
+
+.linkWithArrow:hover {
+  color: var(--accent);
+}
+
+.authLinks a {
+  color: var(--accent);
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form input {
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.error {
+  color: #e74c3c;
+  font-size: 0.85rem;
+}
+
+.btn,
+.btnPrimary,
+.btnDanger {
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: fit-content;
+}
+
+.btnPrimary {
+  background: var(--accent);
+  color: white;
+}
+
+.btnDanger {
+  background: #e74c3c;
+  color: white;
+}
+
+/* Selector de temas con botones */
+.themeSelector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.themeBtn {
+  background: var(--bg-primary);
+  border: 2px solid var(--border);
+  color: var(--text-primary);
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: bold;
+}
+
+.themeBtn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--bg-secondary);
+  transform: translateY(-2px);
+}
+
+.activeTheme {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.activeTheme:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+.userInfo {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.email {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+.passwordBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.passwordBox input {
+  width: 100%;
+  padding-right: 2.5rem;
+}
+
+.eyeBtn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 1.2rem;
+}

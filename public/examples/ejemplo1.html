@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Para Nosotros ❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;500;700&family=Marck+Script&display=swap" rel="stylesheet">
+    <style>
+        /* =========================================
+           VARIABLES Y CONFIGURACIÓN GENERAL
+           ========================================= */
+        :root {
+            /* Tema Oscuro (Passion Mode) */
+            --bg-color: #0f0505;
+            --glass-bg: rgba(20, 10, 10, 0.65);
+            --glass-border: rgba(220, 20, 60, 0.3);
+            --primary: #dc143c; /* Crimson */
+            --secondary: #ff4d6d;
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.7);
+            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            
+            /* Animaciones */
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+            /* VARIABLES ESPECIFICAS DE LA CARTA NUEVA */
+            --carta-primario: #fff;
+            --carta-fondo-sobre: #ffe3ed; 
+            --carta-solapa-sobre: #ffccd5; 
+            --carta-cuerpo-sobre: #ffc1d1; 
+            --carta-sombra: rgba(0, 0, 0, 0.2);
+            --carta-texto: #003049; 
+            --carta-corazon: #ff477e; 
+        }
+
+        body.light-theme {
+            /* Tema Claro (Sweet Mode) */
+            --bg-color: #fff0f5;
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 182, 193, 0.5);
+            --primary: #ff6b9d;
+            --secondary: #ffb7c5;
+            --text-main: #4a2c38;
+            --text-muted: rgba(74, 44, 56, 0.7);
+            --shadow: 0 8px 32px 0 rgba(255, 105, 180, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.8s ease;
+        }
+
+        /* Canvas para fondo de partículas */
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* =========================================
+           COMPONENTES UI (Glassmorphism)
+           ========================================= */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(220, 20, 60, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(220, 20, 60, 0.5);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* =========================================
+           INTERRUPTOR TEMA (Bombilla)
+           ========================================= */
+        .theme-switch-container {
+            position: fixed;
+            top: 0;
+            left: 10%;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .cord {
+            width: 2px;
+            height: 80px;
+            background: var(--text-muted);
+            transition: height 0.3s;
+        }
+
+        .bulb {
+            width: 40px;
+            height: 40px;
+            background: #444;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            transition: var(--transition);
+        }
+
+        .bulb::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 12px;
+            width: 16px;
+            height: 10px;
+            background: #333;
+        }
+
+        /* Estado encendido */
+        body.light-theme .bulb {
+            background: #ffd700;
+            box-shadow: 0 0 40px #ffd700, 0 0 80px #ffeb3b;
+        }
+
+        .theme-switch-container:active .cord {
+            height: 100px;
+        }
+
+        /* =========================================
+           REPRODUCTOR MÚSICA (Vinilo Flotante)
+           ========================================= */
+        .music-widget {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px;
+            border-radius: 50px;
+            transition: width 0.5s ease;
+        }
+        
+        .vinyl-record {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #444, #111);
+            border: 2px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            animation: none;
+        }
+
+        .vinyl-record.spinning {
+            animation: spin 3s linear infinite;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .vinyl-inner {
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
+
+        .music-controls {
+            overflow: hidden;
+            max-width: 0;
+            opacity: 0;
+            white-space: nowrap;
+            transition: var(--transition);
+        }
+
+        .music-widget:hover .music-controls,
+        .music-widget.active .music-controls {
+            max-width: 200px;
+            opacity: 1;
+            margin-right: 10px;
+        }
+
+        /* =========================================
+           PANTALLA DE BLOQUEO
+           ========================================= */
+        #lockScreen {
+            position: fixed;
+            inset: 0;
+            z-index: 900;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-color);
+            transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        #lockScreen.hidden {
+            transform: translateY(-100%);
+        }
+
+        .login-box {
+            padding: 40px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .password-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            height: 20px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .dot.active {
+            background: var(--primary);
+            transform: scale(1.3);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .key {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            font-size: 1.5rem;
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .key:active {
+            background: var(--primary);
+            transform: scale(0.9);
+        }
+
+        /* =========================================
+           CONTENIDO PRINCIPAL
+           ========================================= */
+        #mainContent {
+            padding-top: 100px;
+            padding-bottom: 50px;
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        #mainContent.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 60px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 20px var(--glass-border);
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Contador */
+        .counter-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .time-box {
+            width: 100px;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .time-val {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .time-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+        }
+
+        /* Línea de tiempo */
+        .timeline {
+            max-width: 800px;
+            margin: 60px auto;
+            position: relative;
+            padding: 20px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--glass-border);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            margin-bottom: 50px;
+            position: relative;
+            width: 50%;
+            padding: 0 30px;
+        }
+
+        .timeline-item:nth-child(odd) { left: 0; text-align: right; }
+        .timeline-item:nth-child(even) { left: 50%; text-align: left; }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-dot { right: -10px; }
+        .timeline-item:nth-child(even) .timeline-dot { left: -10px; }
+
+        .memory-img {
+            width: 100%;
+            border-radius: 15px;
+            margin-top: 15px;
+            transition: transform 0.3s;
+        }
+
+        .memory-img:hover {
+            transform: scale(1.03);
+        }
+
+        /* =========================================
+           NUEVO ESTILO CARTA (INTEGRACIÓN)
+           ========================================= */
+        .love-letter-section-new {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin: 80px 0 150px 0; /* Margen inferior extra para cuando la carta se abre */
+            position: relative;
+        }
+
+        .contenedor {
+            width: 400px;
+        }
+
+        .envoltura-sobre {
+            position: relative;
+            background-color: var(--carta-fondo-sobre);
+            box-shadow: 0 0 40px var(--carta-sombra);
+            border-radius: 15px;
+        }
+
+        .sobre {
+            position: relative;
+            width: 400px;
+            height: 300px;
+        }
+
+        .sobre::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 4;
+            border-top: 180px solid var(--carta-solapa-sobre);
+            border-right: 200px solid transparent;
+            border-left: 200px solid transparent;
+            transform-origin: top;
+            transition: all 0.5s ease-in-out 0.7s;
+            border-radius: 10px;
+        }
+
+        .solapa-derecha {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            clip-path: polygon(100% 0, 0 100%, 100% 100%);
+            background-color: var(--carta-cuerpo-sobre);
+            border-bottom-right-radius: 10px;
+            border-top-right-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        .solapa-izquierda {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            clip-path: polygon(0 0, 0 100%, 100% 100%);
+            background-color: var(--carta-cuerpo-sobre);
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .carta {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--carta-primario);
+            text-align: center;
+            box-shadow: 0 0 5px var(--carta-sombra);
+            padding: 20px;
+            border-radius: 10px;
+            transition: transform .5s ease-in-out;
+            /* Asegurar que el texto sea legible */
+            color: var(--carta-texto);
+        }
+
+        .contenido {
+            font-family: "Gill Sans", Calibri, sans-serif;
+            color: var(--carta-texto);
+            text-align: left;
+            font-size: 14px; /* Un poco más grande para legibilidad */
+            border: 3px dotted var(--carta-texto);
+            padding: 10px;
+            height: 100%;
+            line-height: 1.4;
+            cursor: pointer;
+            overflow-y: auto; /* Permitir scroll si es muy largo */
+        }
+
+        .corazon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            background-color: var(--carta-corazon);
+            transform: translate(-50%,0) rotate(45deg);
+            transition: transform 0.5s ease-in-out 1s;
+            z-index: 999;
+            cursor: pointer;
+        }
+
+        .corazon::before,
+        .corazon::after {
+            content: "";
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: var(--carta-corazon);
+            border-radius: 100%;
+        }
+
+        .corazon:before { top: -15px; }
+        .corazon:after { right: 15px; }
+
+        /* Clases dinámicas */
+        .abierto .sobre::before {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .abierto .corazon {
+            transform: rotate(90deg);
+            transition-delay: 0.4s;
+        }
+
+        .carta.mostrar-carta {
+            transform: translateY(-290px);
+            transition: transform .5s ease-in-out;
+        }
+
+        .carta.cerrando-carta {
+            transform: translateY(-290px);
+            transition: transform .5s ease-in-out;
+        }
+
+        .carta.abierta {
+            z-index: 10000;
+        }
+
+        .envoltura-sobre.desactivar-sobre .sobre::before {
+            pointer-events: none;
+        }
+
+        /* Responsive para la carta */
+        @media screen and (max-width: 420px) {
+            .contenedor { width: 300px; }
+            .sobre { width: 300px; height: 250px; }
+            .sobre::before {
+                border-top: 150px solid var(--carta-solapa-sobre);
+                border-right: 150px solid transparent;
+                border-left: 150px solid transparent;
+            }
+        }
+
+        /* Responsive General */
+        @media (max-width: 768px) {
+            .timeline::before { left: 20px; }
+            .timeline-item { width: 100%; padding-left: 50px; padding-right: 0; text-align: left; }
+            .timeline-item:nth-child(even) { left: 0; }
+            .timeline-item:nth-child(odd) { left: 0; }
+            .timeline-item:nth-child(odd) .timeline-dot,
+            .timeline-item:nth-child(even) .timeline-dot { left: 10px; right: auto; }
+            
+            .hero-title { font-size: 2.5rem; }
+            .time-box { width: 80px; }
+            .time-val { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bgCanvas"></canvas>
+
+    <div class="theme-switch-container" id="themeSwitch">
+        <div class="cord"></div>
+        <div class="bulb"></div>
+    </div>
+
+    <div class="music-widget glass-card" id="musicWidget">
+        <div class="music-controls">
+            <span id="songTitle">Nuestra Canción</span>
+        </div>
+        <div class="vinyl-record" id="vinylRecord">
+            <div class="vinyl-inner"></div>
+        </div>
+        <audio id="audioPlayer" loop preload="auto">
+            <source src="unholy.mp3" type="audio/mp3">
+        </audio>
+    </div>
+
+    <div id="lockScreen">
+        <div class="glass-card login-box">
+            <h2 style="margin-bottom: 20px;">¿Cuándo empezó todo?</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Recuerdas cuando la chispa se encendió como fuego</p>
+            
+            <div class="password-dots" id="dotsContainer">
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                <div class="dot"></div><div class="dot"></div>
+            </div>
+
+            <div class="keypad">
+                <div class="key" onclick="addNumber(1)">1</div>
+                <div class="key" onclick="addNumber(2)">2</div>
+                <div class="key" onclick="addNumber(3)">3</div>
+                <div class="key" onclick="addNumber(4)">4</div>
+                <div class="key" onclick="addNumber(5)">5</div>
+                <div class="key" onclick="addNumber(6)">6</div>
+                <div class="key" onclick="addNumber(7)">7</div>
+                <div class="key" onclick="addNumber(8)">8</div>
+                <div class="key" onclick="addNumber(9)">9</div>
+                <div class="key" onclick="clearInput()" style="color: var(--primary)">C</div>
+                <div class="key" onclick="addNumber(0)">0</div>
+                <div class="key" onclick="checkPassword()" style="background: var(--primary)">➜</div>
+            </div>
+            <p id="errorMsg" style="color: var(--primary); opacity: 0; margin-top: 10px; font-size: 0.9rem;">Fecha incorrecta mi amor ❤️</p>
+        </div>
+    </div>
+
+    <div id="mainContent">
+        
+        <section class="hero-section">
+            <h1 class="hero-title">Feliz Aniversario, Amor</h1>
+            <p style="font-size: 1.2rem; margin-top: 10px;">Cada segundo contigo cuenta</p>
+            
+            <div class="counter-wrapper">
+                <div class="glass-card time-box">
+                    <span class="time-val" id="years">0</span>
+                    <span class="time-label">Años</span>
+                </div>
+                <div class="glass-card time-box">
+                    <span class="time-val" id="months">0</span>
+                    <span class="time-label">Meses</span>
+                </div>
+                <div class="glass-card time-box">
+                    <span class="time-val" id="days">0</span>
+                    <span class="time-label">Días</span>
+                </div>
+                <div class="glass-card time-box">
+                    <span class="time-val" id="hours">0</span>
+                    <span class="time-label">Horas</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="glass-card" style="padding: 20px;">
+                    <h3>El Inicio ❤️</h3>
+                    <p class="text-muted">17 Nov 2022</p>
+                    <p style="margin-top: 10px;">El día que nuestras vidas cambiaron para siempre. </p>
+                    <img src="https://picsum.photos/400/250?random=1" alt="Nosotros" class="memory-img">
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="glass-card" style="padding: 20px;">
+                    <h3>Primera Cita 🍷</h3>
+                    <p class="text-muted">Diciembre 2022</p>
+                    <p style="margin-top: 10px;">Esos nervios y risas que nunca olvidaré.</p>
+                    <img src="https://picsum.photos/400/250?random=2" alt="Cita" class="memory-img">
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="glass-card" style="padding: 20px;">
+                    <h3>Viajes Juntos ✈️</h3>
+                    <p class="text-muted">2023</p>
+                    <p style="margin-top: 10px;">Descubriendo el mundo de tu mano.</p>
+                    <img src="https://picsum.photos/400/250?random=3" alt="Viaje" class="memory-img">
+                </div>
+            </div>
+        </div>
+
+        <div class="love-letter-section-new">
+            <h2 style="margin-bottom: 30px; text-shadow: 0 0 10px rgba(0,0,0,0.5);">Tengo algo para ti...</h2>
+            
+            <div class="contenedor">
+                <div class="envoltura-sobre">
+                    <div class="sobre">
+                        <div class="carta">
+                            <div class="contenido">
+                                <strong>Querida Estrella</strong>
+                                <p>
+                                    Hoy es <strong>San Valentín</strong>, el día oficial de los <em>corazones</em>, el <em>chocolate</em> y las declaraciones de amor dramáticas (como en las telenovelas). Así que prepárate, porque aquí va la mía: Desde que te conocí, mi corazón late más rápido que <code>WiFi</code> gratis en una plaza pública. Eres más brillante que un mensaje de "<strong>te amo</strong>" en <strong>LED gigante</strong> y más dulce que el doble de caramelo en un café con extra de crema. Si fueras un algoritmo, serías el más eficiente: optimizas mi felicidad con la menor cantidad de esfuerzo. Si fueras un bug, serías el único que no querría corregir. Y si fueras una aplicación, serías la que siempre tengo anclada en mi pantalla principal. Gracias por hacer de mi vida una versión mejorada, sin errores (bueno, quizá con algunos, pero todos adorables). <br> <strong>Feliz San Valentín</strong>, mi <em>estrella favorita</em>. <br> Con mucho <strong>código</strong> (y <strong>amor</strong>), <br> Tu programador enamorado. <br> <span style="font-size: 0.9em; color: grey;">PD: Si esta carta fuera un programa, su salida sería:</span> <br> <code>"Eres lo mejor que me ha pasado."</code>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="corazon"></div>
+                    <div class="solapa-derecha"></div>
+                    <div class="solapa-izquierda"></div>
+                </div>
+            </div>
+
+            <p style="margin-top: 30px; font-size: 0.9rem; opacity: 0.7;">(Toca el corazón o el sobre)</p>
+        </div>
+
+    </div>
+
+    <script>
+        // CONFIGURACIÓN
+        const START_DATE = new Date("2022-11-17T00:00:00");
+        const PASSWORD = "12345678";
+
+        // VARIABLES GLOBALES
+        let inputPassword = "";
+        let isPlaying = false;
+        
+        // ELEMENTOS DOM
+        const lockScreen = document.getElementById('lockScreen');
+        const mainContent = document.getElementById('mainContent');
+        const dots = document.querySelectorAll('.dot');
+        const audio = document.getElementById('audioPlayer');
+        const vinyl = document.getElementById('vinylRecord');
+        const musicWidget = document.getElementById('musicWidget');
+
+        /* ====================
+           SISTEMA DE BLOQUEO
+           ==================== */
+        function addNumber(num) {
+            if (inputPassword.length < 8) {
+                inputPassword += num;
+                updateDots();
+                if (inputPassword.length === 8) {
+                    setTimeout(checkPassword, 300);
+                }
+            }
+        }
+
+        function clearInput() {
+            inputPassword = "";
+            updateDots();
+            document.getElementById('errorMsg').style.opacity = 0;
+        }
+
+        function updateDots() {
+            dots.forEach((dot, index) => {
+                if (index < inputPassword.length) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        function checkPassword() {
+            if (inputPassword === PASSWORD) {
+                // 1. Iniciar la música inmediatamente
+                if (!isPlaying) {
+                    audio.play().then(() => {
+                        isPlaying = true;
+                        vinyl.classList.add('spinning');
+                        musicWidget.classList.add('active');
+                    }).catch(e => console.log("Audio esperando interacción"));
+                }
+
+                // 2. Transición visual
+                lockScreen.classList.add('hidden');
+                setTimeout(() => {
+                    lockScreen.style.display = 'none';
+                    mainContent.classList.add('visible');
+                }, 800);
+
+            } else {
+                // Error
+                document.getElementById('errorMsg').style.opacity = 1;
+                inputPassword = "";
+                setTimeout(() => {
+                    updateDots();
+                    const box = document.querySelector('.login-box');
+                    box.animate([
+                        { transform: 'translateX(0)' },
+                        { transform: 'translateX(-10px)' },
+                        { transform: 'translateX(10px)' },
+                        { transform: 'translateX(0)' }
+                    ], { duration: 300 });
+                }, 500);
+            }
+        }
+
+        /* ====================
+           CONTADOR DE TIEMPO
+           ==================== */
+        function updateCounter() {
+            const now = new Date();
+            const diff = now - START_DATE;
+
+            const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+            const months = Math.floor((diff % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24 * 30.44));
+            const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24));
+            const hours = now.getHours();
+
+            document.getElementById('years').innerText = years;
+            document.getElementById('months').innerText = months;
+            document.getElementById('days').innerText = days;
+            document.getElementById('hours').innerText = hours;
+        }
+        setInterval(updateCounter, 1000);
+        updateCounter();
+
+        /* ====================
+           MÚSICA Y UI
+           ==================== */
+        vinyl.addEventListener('click', toggleMusic);
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                vinyl.classList.remove('spinning');
+                musicWidget.classList.remove('active');
+            } else {
+                audio.play().then(() => {
+                    vinyl.classList.add('spinning');
+                    musicWidget.classList.add('active');
+                }).catch(e => console.log("Interacción requerida para audio"));
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Interruptor de Tema
+        const themeSwitch = document.getElementById('themeSwitch');
+        themeSwitch.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            initParticles(); 
+        });
+
+        /* ====================
+           LOGICA DE LA NUEVA CARTA (Desde script_v2.js)
+           ==================== */
+        const envoltura = document.querySelector(".envoltura-sobre");
+        const carta = document.querySelector(".carta");
+
+        document.addEventListener("click", (e) => {
+            if (e.target.matches(".sobre") || 
+                e.target.matches(".solapa-derecha") ||
+                e.target.matches(".solapa-izquierda") ||
+                e.target.matches(".corazon")) {
+                envoltura.classList.toggle("abierto");
+            
+            } else if (e.target.matches(".sobre *")) {
+                if (!carta.classList.contains("abierta")) {
+                    carta.classList.add("mostrar-carta");
+
+                    setTimeout(() => {
+                        carta.classList.remove("mostrar-carta");
+                        carta.classList.add("abierta");
+                    }, 500);
+                    envoltura.classList.add("desactivar-sobre")
+                } else {
+                    carta.classList.add("cerrando-carta");
+                    envoltura.classList.remove("desactivar-sobre");
+
+                    setTimeout(() => {
+                        carta.classList.remove("cerrando-carta")
+                        carta.classList.remove("abierta")
+                    }, 500);
+                }
+            } 
+        });
+
+        /* ====================
+           FONDO DE PARTÍCULAS (CANVAS)
+           ==================== */
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 5 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+                
+                // Color basado en el tema actual
+                const isLight = document.body.classList.contains('light-theme');
+                this.color = isLight 
+                    ? `rgba(255, 105, 180, ${Math.random() * 0.5})` 
+                    : `rgba(220, 20, 60, ${Math.random() * 0.5})`;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 50; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+    </script>
+</body>
+</html>

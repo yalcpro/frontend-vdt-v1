@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" width="400" height="120">
+  <defs>
+    <linearGradient id="verdeDeg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2E7D32;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#66BB6A;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="fondoDeg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8F5E9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#C8E6C9;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Fondo redondeado suave -->
+  <rect x="0" y="0" width="400" height="120" rx="20" ry="20" fill="url(#fondoDeg)" />
+
+  <!-- Carrito de compras estilizado -->
+  <g transform="translate(30, 20)">
+    <!-- Cesta -->
+    <rect x="10" y="30" width="80" height="50" rx="8" fill="url(#verdeDeg)" />
+    <!-- Asa -->
+    <path d="M20 30 L20 15 Q20 5 35 5 L65 5 Q80 5 80 15 L80 30" fill="none" stroke="#2E7D32" stroke-width="6" stroke-linecap="round" />
+    <!-- Ruedas -->
+    <circle cx="25" cy="85" r="10" fill="#1B5E20" />
+    <circle cx="75" cy="85" r="10" fill="#1B5E20" />
+    <!-- Ejes de ruedas -->
+    <circle cx="25" cy="85" r="4" fill="#A5D6A7" />
+    <circle cx="75" cy="85" r="4" fill="#A5D6A7" />
+    <!-- Línea de detalles -->
+    <line x1="15" y1="50" x2="85" y2="50" stroke="#A5D6A7" stroke-width="2" stroke-dasharray="4 4" />
+  </g>
+
+  <!-- Texto "Venta de to'" -->
+  <text x="140" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="36" font-weight="bold" fill="#1B5E20" letter-spacing="1">
+    Venta de
+  </text>
+  <text x="140" y="100" font-family="'Segoe UI', Arial, sans-serif" font-size="40" font-weight="bold" fill="#2E7D32" letter-spacing="2">
+    to'
+  </text>
+</svg>

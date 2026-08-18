@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport", maximum-scale=1.0, user-scalable="no"/>
+    <title>LOVEFLIX | Una historia de Romance </title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined|Material+Icons+Round" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #E50914;
+            --bg-dark: #141414;
+            --bg-card: #181818;
+            --text-white: #ffffff;
+            --text-gray: #b3b3b3;
+            --font-main: 'Montserrat', sans-serif;
+            --nav-height: 70px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box; /* Crucial para evitar desbordamientos */
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden; /* Evita scroll horizontal indeseado */
+            padding-bottom: 60px; /* Espacio para menú móvil */
+        }
+
+        a { text-decoration: none; color: inherit; transition: var(--transition); }
+        button { border: none; background: none; cursor: pointer; color: inherit; font-family: inherit; }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; }
+
+        /* =========================================
+           2. UTILIDADES & COMPONENTES
+           ========================================= */
+        .container {
+            padding: 0 4%; /* Margen lateral responsivo tipo Netflix */
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            margin-top: 3rem;
+            color: var(--text-white);
+        }
+
+        /* Badge Styles */
+        .badge {
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+        .badge-new { background-color: var(--primary); color: white; }
+        .badge-match { color: #46d369; border: 1px solid #46d369; }
+        .badge-age { border: 1px solid var(--text-gray); padding: 0 4px; }
+
+        /* =========================================
+           3. NAVBAR (Navegación)
+           ========================================= */
+        .netflix-nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: var(--nav-height);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 4%;
+            /* Gradiente negro suave para legibilidad */
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+            transition: background-color 0.3s;
+        }
+
+        .nav-left, .nav-right { display: flex; align-items: center; gap: 20px; }
+        
+        .logo {
+            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links a { font-size: 0.9rem; font-weight: 500; opacity: 0.9; }
+        .nav-links a:hover { opacity: 0.7; }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        /* =========================================
+           4. HERO SECTION (Cabecera Principal)
+           ========================================= */
+        .hero {
+            position: relative;
+            height: 85vh; /* Ocupa 85% del alto de la pantalla */
+            width: 100%;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: top;
+            z-index: 0;
+        }
+
+        /* La "magia" del degradado de Netflix */
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, #141414 0%, transparent 60%, rgba(0,0,0,0.5) 100%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding-bottom: 15vh;
+            max-width: 600px;
+            width: 100%;
+            margin-left: 4%;
+        }
+
+        .hero-title {
+            font-size: 4rem; /* Grande en escritorio */
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            line-height: 1.4;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        .hero-buttons { display: flex; gap: 1rem; }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+        .btn:active { transform: scale(0.95); }
+        .btn i { margin-right: 0.5rem; font-size: 1.4rem; }
+
+        .btn-play { background: white; color: black; }
+        .btn-play:hover { background: rgba(255, 255, 255, 0.75); }
+
+        .btn-info { background: rgba(109, 109, 110, 0.7); color: white; backdrop-filter: blur(5px); }
+        .btn-info:hover { background: rgba(109, 109, 110, 0.4); }
+
+        /* =========================================
+           5. CARDS & GRIDS (Contenido)
+           ========================================= */
+        main { position: relative; z-index: 10; margin-top: -10vh; }
+
+        /* Slider Horizontal (Continue Watching) */
+        .horizontal-slider {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+            /* Ocultar scrollbar estándar */
+            scrollbar-width: none; 
+        }
+        .horizontal-slider::-webkit-scrollbar { display: none; }
+
+        .video-card {
+            flex: 0 0 280px; /* Ancho fijo para tarjetas */
+            background: var(--bg-card);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: transform 0.3s ease, z-index 0s;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .video-card:hover {
+            transform: scale(1.05);
+            z-index: 20;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .card-image-wrapper { position: relative; aspect-ratio: 16/9; }
+        .card-image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .progress-bar {
+            position: absolute; bottom: 0; left: 0;
+            height: 3px; background: #555; width: 100%;
+        }
+        .progress-value { height: 100%; background: var(--primary); }
+
+        .card-info { padding: 10px; }
+        .card-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 5px; }
+        .card-meta { font-size: 0.75rem; color: var(--text-gray); }
+
+        /* Grid Posters (Trending) */
+        .poster-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .poster-card {
+            position: relative;
+            aspect-ratio: 2/3;
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .poster-card:hover { transform: scale(1.05); z-index: 10; }
+        .poster-card img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Featured Large Cards (Only on Loveflix) */
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .featured-card {
+            position: relative;
+            height: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .featured-card img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.5s;
+        }
+        .featured-card:hover img { transform: scale(1.1); }
+        .featured-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+        }
+
+        /* =========================================
+           6. FOOTER
+           ========================================= */
+        footer {
+            max-width: 900px;
+            margin: 50px auto 0;
+            padding: 20px 4%;
+            color: var(--text-gray);
+            font-size: 0.85rem;
+        }
+        
+        .social-icons { font-size: 1.5rem; margin-bottom: 1rem; display: flex; gap: 15px; }
+        .social-icons i:hover { color: white; }
+
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .footer-links li { margin-bottom: 0.5rem; }
+        .footer-links a:hover { text-decoration: underline; }
+
+        .service-code {
+            border: 1px solid var(--text-gray);
+            padding: 5px 10px;
+            margin: 20px 0;
+            font-size: 0.8rem;
+        }
+        .service-code:hover { color: white; border-color: white; }
+
+        /* =========================================
+           7. MOBILE BOTTOM NAV & RESPONSIVE
+           ========================================= */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0; left: 0; width: 100%;
+            background: #141414;
+            border-top: 1px solid #333;
+            z-index: 200;
+            padding: 8px 0;
+            justify-content: space-around;
+        }
+        
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.6rem;
+            color: var(--text-gray);
+        }
+        .mobile-nav-item.active { color: white; }
+        .mobile-nav-item span { font-size: 1.4rem; margin-bottom: 2px; }
+
+        /* Media Queries - Adaptación a Pantallas */
+        @media (max-width: 768px) {
+            .nav-links, .nav-right button:not(.mobile-visible) { display: none; }
+            .hero-title { font-size: 2.5rem; }
+            .hero { height: 65vh; }
+            .hero-desc { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+            
+            .featured-grid { grid-template-columns: 1fr; }
+            .footer-links { grid-template-columns: repeat(2, 1fr); }
+            
+            .mobile-nav { display: flex; }
+            main { margin-top: 0; padding-top: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="netflix-nav">
+        <div class="nav-left">
+            <a href="#" class="logo">LOVEFLIX</a>
+            <div class="nav-links">
+                <a href="#">Home</a>
+                <a href="#">TV Shows</a>
+                <a href="#">Movies</a>
+                <a href="#">New & Popular</a>
+                <a href="#">My List</a>
+            </div>
+        </div>
+        <div class="nav-right">
+            <button><span class="material-icons-outlined">search</span></button>
+            <button class="nav-link-text">KIDS</button>
+            <button><span class="material-icons-outlined">notifications</span></button>
+            <div class="user-avatar">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuB22XLuHx6bNXGF4VwZ6lY0EnzkfUeZ3_qPQTBpnyhF_9qe3mJ4MvQAdpCm5RXwBHmv7s7Gv2xarnXw5nYqEganjrXBeW-JO39FVpfpd8zqgHkCovS754amSomOETo4h2i8X7QtYag8roMhJUTwUIcdiGif1YddAwkmu9yL8hsgEx7DyRZGyXXas5D-pBjcKXfC6dF8VGvs0IlN-lS1skbi5unMF4ABd_2lUpk7dgZ1LdpyLrlRNhcH_LhPgSU2JiNTjSg7s0yrXunA" alt="User">
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfw9TLs_CEYKxPoJr0-dYzy_C93KK10Q6ipfeO8SGR-LROYPiTuRczNEpAr7cigi81-aZvU8MCgbOt_k-F1lN7FVzLQWIAamkbXZSfR_EMH2TTW7AUXC5X7WndseaRbZOUtFkWu2BVDplV0EI0XzdWDRaOEEzenCNYY5UvNSajCi_7oun6kci-feFtwA08-N4Ca_DDLu0sIDfAn7yuhb9_fqtgwGspLKOFN0wCXmhEoxzpDgWnQIzC9-UI93jANE6xurP94tpq0Ri2" alt="Hero Background" class="hero-bg">
+        <div class="hero-overlay"></div>
+        
+        <div class="hero-content">
+            <div class="hero-meta">
+                <span style="color: var(--primary); font-weight: 800; letter-spacing: 2px;">N SERIES</span>
+                <span style="background: #ffffff50; width: 1px; height: 15px;"></span>
+                <span>Romantic Drama</span>
+            </div>
+            
+            <h1 class="hero-title">LOVEFLIX</h1>
+            
+            <p class="hero-desc">
+                Una encantadora historia de identidad equivocada y romance que se desarrolla en una pequeña cafetería de Cuba. Cuando el destino interviene, los corazones chocan de formas inesperadas.
+            </p>
+            
+            <div class="hero-buttons">
+                <button class="btn btn-play">
+                    <span class="material-icons-round">play_arrow</span> Play
+                </button>
+                <button class="btn btn-info">
+                    <span class="material-icons-outlined">info</span> More Info
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <section>
+            <h2 class="section-title">Continue Watching for You</h2>
+            <div class="horizontal-slider">
+                <article class="video-card">
+                    <div class="card-image-wrapper">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmzbzDJHYCx_PVXIjKbd_hPtDexOirMhwRZjBmjmLMJGvMND04GLDu1D7KMJiOc7K_bk44wRAMI9hzMzljhAxrxLTTESgcpxa9fw8JeIvyrMwef2v3-nFgWN51SxSSkfYEi2rWE53ciAShCWHGtuHduIncnluTQlP00PacO82y8sNe9xZGmbpFT4JByrS2g9c48sFuIlvlEM_uC2Q3iLLJ9yWlH9H3FypXC0H9RggIik_Wrrlk8VzzBmg9WeLCmXwB1NEireySd9Iw" alt="Show 1">
+                        <div class="progress-bar"><div class="progress-value" style="width: 75%"></div></div>
+                    </div>
+                    <div class="card-info">
+                        <h3 class="card-title">Comida con mis amigos</h3>
+                        <p class="card-meta">S1:E4 "The Secret"</p>
+                    </div>
+                </article>
+                <article class="video-card">
+                    <div class="card-image-wrapper">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAE2Pli9MfwEAzC9jvdf8YBIXhAfh3WovfgFfJZqc5SWCwhR95wIKb99aw-seSmN08gs-QdUP9lpaDj4e4kTcQX7XeCaB21QG8wtg5yO2_BESKQoX4Vurzlx2omQ59IjBAvh6AEkEYVN6v4yIxwSM485wSAmuzSljOYeHqdLn_WzzSjRhRQCpS-3mGfyNwGTe0_guis1jnW3_CoSzQoUQQSp-RqivokNGb01WcdduL3_k3CHp3x55lrbGYywkkyJrflNvTycERBby9c" alt="Show 2">
+                        <div class="progress-bar"><div class="progress-value" style="width: 30%"></div></div>
+                    </div>
+                    <div class="card-info">
+                        <h3 class="card-title">Sunset Promises</h3>
+                        <p class="card-meta">S2:E1 "Un Nuevo Comienzo"</p>
+                    </div>
+                </article>
+                <article class="video-card">
+                    <div class="card-image-wrapper">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYiHdAYg5ZpHC0f_D5Celcou-bnYJhSr8HJHLats_V4n6bbQ-aJMHqCV0sB47ZrAPsTC_1CEC5Wk0qTQlJH3exyGKxwVkGft8mo13iscTYyzSErE6zMy35b1_cRKhAvlubN80KeLedSw44w_Z2bRjo87GNoomZzxoQZ3oyZBWvA4BMea-9kNSqh7iGbxvY-ODLWmK0kX6eO01Gpq1cNarxmQXq_PtSzC2wT9gyTtO0hjfT73EIlHv0XXU87iSjx4jMSb00RVMBmag7" alt="Show 3">
+                        <div class="progress-bar"><div class="progress-value" style="width: 50%"></div></div>
+                    </div>
+                    <div class="card-info">
+                        <h3 class="card-title">Looking Back</h3>
+                        <p class="card-meta">Movie</p>
+                    </div>
+                </article>
+                <article class="video-card">
+                    <div class="card-image-wrapper">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZQLosqfniDxguOpP3GaY0JaIxWXVfH2VIaQmlcFVK1o6N9A5zfnfb6Zar5nT5zt-FJ3Pj4UjiKvRBnqKdRsGW-DRLTkojn-dDydlJ79MxLwck4LkzXasqUVR72nQMz_BFgNtMqkTsGG93WPiWjIDJOSJ1dkGtNfTdyj8es_3FSR8OxPfd7hmihl0M9ea3SQciUPNf_2apPGJdCDhoaZzHAr1HVYwwg8RyWMW0s6fJQUXJHG5YK3tYFQzcgPP7cNjIX88-_BQipIM_" alt="Show 4">
+                        <div class="progress-bar"><div class="progress-value" style="width: 90%"></div></div>
+                    </div>
+                    <div class="card-info">
+                        <h3 class="card-title">Forever Yours</h3>
+                        <p class="card-meta">S1:E8 "Finale"</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">Trending Now</h2>
+            <div class="poster-grid">
+                <article class="poster-card">
+                    <span class="badge badge-new" style="position: absolute; top: 5px; left: 0; z-index: 5;">TOP 10</span>
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAg0ya7zsN87I5hgd_Up5Zn20KsiWoUz8V62bEKk-Z5ZZJkiRelXRfUGYQ0C_l49oBENGLSRHlWgWpjNox63sWjnQriEaJjSnHD_2LoFg53kfRHIi1yt7fgRAF1-1-ijXMbOAPvUMO0NFf5A4DcDh2cPiQVp45pYMtAUo6EckTu-and29e3gutlT8V6IDCPH83yYfOKTx44jPbcmQKiPglqJlQfZKp2XWVhz312u3xSUiRTBOnWFtaI5Vx4olSyg4jOScllAhrGEuj" alt="Trending 1">
+                </article>
+                <article class="poster-card">
+                    <span class="badge badge-new" style="position: absolute; top: 5px; left: 0; z-index: 5;">NEW</span>
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDB5yCvDTt1L8dch_bB1GAM6iJfP9NSoiTnEwqoC1o3BDlzvhs561bQ_nhBXqEk_xj6AmidvyqzkGHdoTmnOA1bCGgwSG2cSLV44MtfRsPviKm131WZUz-9G5o24lnUgDS14pWLZb6GC_nZpTnC12PZnN-IERipWfu9WfxjnkxJf3WPHan_R8AsJUkRqtl0BlNFeQLUCVs0cXolkDePgh9ksI2kjiGWuYk_jQZUlbzcF2Sqz5TNrVkAVWx4WvWAg40sapJBuZugJRH0" alt="Trending 2">
+                </article>
+                <article class="poster-card">
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBwR8TdQXx8zw78xkeoENLcO3m4fuXFWjV3eXJvMkcIf6BAl_RjbmGSeC90Mobv71v-sGWMQlElX43w6tNcpoZ2EK1HMMlfwwMkIDMs1WBPcTRfyO1dpqk5FPOxuTicVBSf6QlvmNs69KsSARColcevdrfqNI80qLV-MuDNbTfyNVFdrYULu6leLRy8soYOoo9w6xnZ8Qg_SR3HZnHKe8GsCowwyVXV3R5CyF2wziueAhaRVryvt-ZeFWjiqzBuiR5M5ZGXrQNXq5Y" alt="Trending 3">
+                </article>
+                <article class="poster-card">
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDo4bGkUMtGsRygy_10urZU-Hd-3p9N6vc8jslpJbahwDBrugNYm2dmkqqdW9Mq3lySPCOVnxiDoeD7PjCUU8xbV01uNb56jAB0rCrYB_lILaMQz5luYTVVQijRqI0ozGEZWJqf1KVw8d_LBy2eW6vcd86S1MxhyiqsDHj8NmQn5GsjqtNTJJ39Jh0xcevqyi54-wfd_FUv2akKUnPuZzz42EeoDN66voRz5kKsePMlRJdeBZay5W3rYuOtqiUvihqZF0yyqRFCzm1U" alt="Trending 4">
+                </article>
+                <article class="poster-card">
+                    <span class="badge badge-new" style="position: absolute; top: 5px; left: 0; z-index: 5;">TOP 10</span>
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKNEUoBmJHNGa2YKBAB49GFY1PPxVfqsZ7pnuwe0-4_hsXDOgaGZkYJ8Tps-H1jxpmH6dQO7NqEp2KZbxqIcwnEePRZDR_0SYozUpFjqLWSlivhzo-WC65t7PRn9hYLTI_yZo1jEqDNSp-jK_HKg08mo4EISzBt_aYePxAyBXZeVZF3fgxZGTrvJvXjI9SQaaXTkLlmLTNGoFH2g3S-maeXBNX7wFj7Blm8WNJrpZvlxQg2UV9Wub1ExZHmANo02bMcDK4lIX9t801" alt="Trending 5">
+                </article>
+                <article class="poster-card">
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYTWePjLPfSLLefqcsvkl5RcFPZEd1is5_8CcngG6S56ir-lXk2jGYAC2rfzgg-sziv8yP21noR27dtk2xluVqyT7Qnoqn8qa-AZeZFgqHhGZ9ug8Sn5Sa3btpVgB-CgJE-n4ZSaybBLqOCVmQhqVtJgITPiY6O0760XjhalhACriQTztHvVaWTs5koqoQVDfH_5epVaB_HpsLK7oKISwAR0_A2VflNYu8lPm5U7GqTTC5UndbdnYWye0qNsFYpTCw7fnIomDqsSSu" alt="Trending 6">
+                </article>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">Only on LOVEFLIX</h2>
+            <div class="featured-grid">
+                <article class="featured-card">
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBo8ArrsK9e77lnEwgvUnpB6dmg0bz2CPJPNwS5cEU3bW1CukeRilfhRjOCPF3v_8HzvsGzR2KE5Xrs9DVJGrraTgYAq4-MST9fgVXbYDrGiosbIHvmrFdP2Y20cqka-JkqjL4JU8DP73Nw2g-DQXsShysgnmXhDk5zfFddOO0mrZueFDawRtuFC9bvimH32YVO7bwXKq83-si07xvSRMM3VCW3hUK6NQ1FhNVzHETwe7eDCrkOt3vLaQJ6qpsrgpDM8dTJiaM50S4t" alt="Feature 1">
+                    <div class="featured-overlay">
+                        <div style="margin-bottom: 10px; display: flex; align-items: center; gap: 5px;">
+                            <span class="material-icons-round" style="color: var(--primary);">local_fire_department</span>
+                            <span class="badge">Trending #1</span>
+                        </div>
+                        <h3 style="font-size: 2rem; font-weight: 800; margin-bottom: 5px;">Burning Hearts</h3>
+                        <p style="color: #ccc;">Season 1 Coming Friday</p>
+                    </div>
+                </article>
+                <article class="featured-card">
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRGCiRdWbaZj99VWMCOyilUWlwlegESVWWhsPv-kTBqoLblrqPVQ5Lrpgfqq4XzZcHjeInpnWEEkoW8YOKGYdTAFro7Hl-UjyVsHyjuHVm4vzH10daHLT5ken6_iW8rFa5tw16rdZ94kqwzRfIE5CWD6yUw1CQ8MpnlVTWOEkVO4XbgOnDn9qEQQHWDrTcMTtsDyqa8jRQFBzkFvZoFFebuRpcanTPICmpKrXktXUf9oD-tiUif8Bi8oMhPay2L-xhxPJ_JrasMe_8" alt="Feature 2">
+                    <div class="featured-overlay">
+                        <span class="badge badge-new" style="width: fit-content; margin-bottom: 10px;">NEW EPISODES</span>
+                        <h3 style="font-size: 2rem; font-weight: 800; margin-bottom: 5px;">Coffee Prince</h3>
+                        <p style="color: #ccc;">Critically Acclaimed</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+        
+        <section>
+            <h2 class="section-title">Romantic Comedies</h2>
+            <div class="poster-grid">
+                <article class="poster-card">
+                   <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUOkIeV6QcWNMinzTpKOpFEhIgOWARQdVOqzklp5oxU8dIJfTaP1AHOoS5YUyBrlWdRKnziIOxX3hBEERVR0GorBh9TzdilIvrwgBn0JQaFTuqRlxzVfebWeY0gJt5OXPY9GgH-pG53aQ80MNdbS18H2X0BP_DhI_LXCOcuQA8eluyHMTuBXJMUlj1DXyozB03uss87klnph6FsQK75nKvQA6bPKm_NFoTTuFZUydS5K8kmHyR1YKIPL6JEqN0cRvavJWTHHEQ9WAD" alt="Romcom 1">
+                   <div class="featured-overlay" style="justify-content: flex-end; opacity: 0; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0'">
+                       <h4>Furry Friends</h4>
+                       <div style="display:flex; gap: 5px; margin-top: 5px;">
+                           <span class="badge badge-match">98% Match</span>
+                           <span class="badge badge-age">PG-13</span>
+                       </div>
+                   </div>
+                </article>
+                <article class="poster-card">
+                   <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvn_9m0uEPn-Ub9qQ1lnDO_tahzIKXg7ZBCnTFSqSyH_gbbjTsQ-sbLjfmsgu6FzXCLavnZgvsi6I-YEc8CnoftJx7zBFR7d-78sUukc_MRTXyiD9PngFKJBTEJmfjzYleb74ywZSboReWpwOIt9uW2_xg22oee1M5UBX7gSDUOSMVEPRp2Jqz8AMLB1jfr2THRAyuqpoVlC990rGSV3DkE0E3mni7Or61OwABh64CRatjt8XgsEWCaO6qA_nCeIDlBvVgUEYa9fJV" alt="Romcom 2">
+                </article>
+                <article class="poster-card">
+                   <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_mu_nvRmdyHSvvVKiz44yOSBczr2Q5oI_yvCiW4bYE_W3DHG8hNpWRwG_E3IjebJtI9x15NBfkqNXpPqQKMn-uoiEncSjLd07VPVC7O4YVGLIqd03UCdmrZ3Y-vqKdl6j1qbeVJvfhrOkMKwukKowOVoYq4ugORL4cUbT6PqIFZanPBu7_5bJSIklx0tK4qhIHM5uxEiuearnqBYQMux079kxVdrEWIyZDTptFXoMYSiiyRAedVzETtpzrF4SZBwQw5Y037cYrSwh" alt="Romcom 3">
+                </article>
+                <article class="poster-card">
+                   <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAA0TnOmsvpOzVOUiHEjWMEVXVXl4yd7_tuEyPWcY8jmORmc78GTGJf4VaY0AP_YaZIf1S4UFIX6mOwLlri9Dw390_R9Ygh_PfsNWE0Gi6dzpIH0TsLid__zZ9fQn3Xqy9nhowgbNBDYRMekrz80yK_1sviZtfM_ED2y2oHqt7bQq_um_XY_ZVE55vL_TZqwhe2vAQ3MhFi0q_L2yNVkjaSJXUrV_-RMdSrWOh1vUuBUfLXhKN-jjxEl3kVDy8JAChePu1LeH0Z2uy9" alt="Romcom 4">
+                </article>
+                <article class="poster-card">
+                   <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5pVvZ4rnWtmLPeV-vsj9FZi5S0GPVfBTMJPQJCSxQyTkP0yjqGNFN0F_IVifGAA6GZPmsbptDAZMn54bJqsSHzkqGrkRpCE6NlxTATcf1zeiFWVZntw9k-vU2HniYI0QSR3vNuopAzKuD1SKeuObFU9lTrwl-nzCM7Xtg9n2l2SbifBEyUAMOxyiw7gJ6tth4-Y4MkV5jlwqcGLvQG9K-0rXJ31wi3gRP5GG3ukU1_fpS0myQ2HJMaCD4lYwwwINAO1hkzr_XSaHT" alt="Romcom 5">
+                </article>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="social-icons">
+            <i class="fab fa-facebook-f"></i>
+            <i class="fab fa-instagram"></i>
+            <i class="fab fa-twitter"></i>
+            <i class="fab fa-youtube"></i>
+        </div>
+        
+        <ul class="footer-links">
+            <li><a href="#">Audio Description</a></li>
+            <li><a href="#">Investor Relations</a></li>
+            <li><a href="#">Legal Notices</a></li>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Jobs</a></li>
+            <li><a href="#">Cookie Preferences</a></li>
+            <li><a href="#">Gift Cards</a></li>
+            <li><a href="#">Terms of Use</a></li>
+            <li><a href="#">Corporate Information</a></li>
+            <li><a href="#">Media Center</a></li>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Contact Us</a></li>
+        </ul>
+
+        <button class="service-code">Service Code</button>
+        <p class="copyright">© 1997-2023 LOVEFLIX, Inc.</p>
+    </footer>
+
+    <div class="mobile-nav">
+        <div class="mobile-nav-item active">
+            <span class="material-icons-outlined">home</span>
+            Home
+        </div>
+        <div class="mobile-nav-item">
+            <span class="material-icons-outlined">video_library</span>
+            New & Hot
+        </div>
+        <div class="mobile-nav-item">
+            <div style="position: relative;">
+                 <span class="material-icons-outlined" style="color: var(--primary);">favorite</span>
+            </div>
+            My Love
+        </div>
+        <div class="mobile-nav-item">
+            <span class="material-icons-outlined">download</span>
+            Downloads
+        </div>
+    </div>
+
+</body>
+</html>

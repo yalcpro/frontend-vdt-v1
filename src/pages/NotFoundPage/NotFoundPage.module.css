@@ -1,0 +1,23 @@
+.container {
+  text-align: center;
+  margin-top: 5rem;
+}
+
+.container h1 {
+  font-size: 6rem;
+  color: var(--accent);
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.btn {
+  background: var(--accent);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 10px;
+}
